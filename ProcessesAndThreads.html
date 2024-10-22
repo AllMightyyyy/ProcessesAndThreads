@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSP Tema 1 & 2 - Process and Multithreading Programming in Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            color: #f8f8f2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Process and Multithreading Programming in Java</h1>
+        <p>Comprehensive Guide for PSP Tema 1 & 2</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#psp-tema-1">PSP Tema 1 - Process Programming</a></li>
+            <li><a href="#psp-tema-2">PSP Tema 2 - Multithreading Programming</a></li>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#activities">Further Activities</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="psp-tema-1">
+            <h2>PSP Tema 1 - Process Programming</h2>
+            <section id="chapter-1">
+                <h3>Chapter 1: Multiprocessing Programming</h3>
+                <section id="introduction-to-processes">
+                    <h4>Introduction to Processes</h4>
+                    <h5>Definitions of Processes and Programs</h5>
+                    <p><strong>Program:</strong> A set of instructions written in a programming language intended to perform a specific task. It is a passive entity stored on disk (e.g., <code>.java</code>, <code>.class</code>, or <code>.jar</code> files).</p>
+                    <p><strong>Process:</strong> An active instance of a program in execution. It contains the program code and its current activity, including the program counter, registers, and variables.</p>
+                    <h6>Key Differences:</h6>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Program</th>
+                                <th>Process</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>State</td>
+                                <td>Static (stored on disk)</td>
+                                <td>Dynamic (in execution)</td>
+                            </tr>
+                            <tr>
+                                <td>Lifetime</td>
+                                <td>Exists until deleted</td>
+                                <td>Exists while executing and terminates after</td>
+                            </tr>
+                            <tr>
+                                <td>Resources</td>
+                                <td>No resources allocated</td>
+                                <td>Allocates system resources (CPU, memory)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><strong>Java Perspective:</strong> In Java, the concept of a process is often associated with running a Java Virtual Machine (JVM) instance. Each JVM instance is a separate process.</p>
+                    <p><strong>Example:</strong></p>
+                    <pre><code>// HelloWorld.java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+</code></pre>
+                    <p>When you execute <code>java HelloWorld</code>, a new process is created to run this program.</p>
+                </section>
+                <section id="process-characteristics">
+                    <h5>Process Characteristics and Their Distinction from Programs</h5>
+                    <p><strong>Characteristics of a Process:</strong></p>
+                    <ol>
+                        <li><strong>Uniqueness:</strong> Each process has a unique Process ID (PID).</li>
+                        <li><strong>State:</strong> Running, waiting, etc.</li>
+                        <li><strong>Resources:</strong> Allocated memory, file descriptors, etc.</li>
+                        <li><strong>Isolation:</strong> Processes are isolated from each other.</li>
+                    </ol>
+                    <p><strong>Distinction from Programs:</strong></p>
+                    <ul>
+                        <li>A single program can have multiple processes executing it concurrently.</li>
+                        <li>Processes have their own memory space, whereas programs do not until they are executed.</li>
+                    </ul>
+                    <p><strong>Java Illustration:</strong> If you run multiple instances of a Java application, each instance is a separate process with its own memory and execution context.</p>
+                    <pre><code># Run two instances of the same Java program
+java MyApp &
+java MyApp &
+</code></pre>
+                    <p>Each <code>MyApp</code> runs in its own process, even though they are executing the same program.</p>
+                </section>
+                <section id="process-creation-management">
+                    <h5>Process Creation and Management</h5>
+                    <p>In Java, process creation and management can be handled using the <code>ProcessBuilder</code> or <code>Runtime</code> classes. We'll focus on <code>ProcessBuilder</code> as it's more flexible and recommended.</p>
+                    <h6>Creating Processes Using <code>ProcessBuilder</code></h6>
+                    <p><code>ProcessBuilder</code> allows you to create and manage operating system processes.</p>
+                    <p><strong>Example: Running a Simple System Command</strong></p>
+                    <pre><code>import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class ProcessCreationExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+
+        // For example, list directory contents (Unix: "ls -l", Windows: "cmd /c dir")
+        processBuilder.command("bash", "-c", "ls -l");
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("\nExited with code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>ProcessBuilder Initialization:</strong> Initializes a <code>ProcessBuilder</code> instance.</li>
+                        <li><strong>Command Specification:</strong> Specifies the command to execute. Here, it's <code>ls -l</code> for Unix-like systems. For Windows, you might use <code>cmd</code>, <code>/c</code>, <code>dir</code>.</li>
+                        <li><strong>Starting the Process:</strong> <code>processBuilder.start()</code> starts the process.</li>
+                        <li><strong>Reading Output:</strong> Captures the output of the process using <code>InputStreamReader</code>.</li>
+                        <li><strong>Waiting for Completion:</strong> <code>process.waitFor()</code> waits for the process to finish and retrieves the exit code.</li>
+                    </ol>
+                    <h6>Managing Child Processes with <code>wait()</code> and <code>exit()</code></h6>
+                    <p>In Java, you can manage child processes by waiting for their completion or terminating them.</p>
+                    <p><strong>Example: Waiting for a Process to Complete</strong></p>
+                    <pre><code>public class ProcessWaitExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("sleep", "5"); // Sleep for 5 seconds
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("Process started. Waiting for it to finish...");
+
+            int exitCode = process.waitFor(); // Waits until the process finishes
+            System.out.println("Process finished with exit code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Example: Terminating a Process</strong></p>
+                    <pre><code>public class ProcessTerminateExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("sleep", "30"); // Sleep for 30 seconds
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("Process started. It will be terminated in 5 seconds...");
+
+            Thread.sleep(5000); // Wait for 5 seconds
+            process.destroy();   // Terminate the process
+
+            System.out.println("Process terminated.");
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><code>process.waitFor()</code>: Waits for the process to terminate and returns the exit code.</li>
+                        <li><code>process.destroy()</code>: Terminates the process.</li>
+                    </ul>
+                    <h6>Process Identifiers (PIDs) and the Process Control Block (PCB)</h6>
+                    <p><strong>Process ID (PID):</strong></p>
+                    <ul>
+                        <li>Each process is assigned a unique PID by the operating system.</li>
+                        <li>In Java, you can retrieve the PID using reflection or Java 9's <code>ProcessHandle</code>.</li>
+                    </ul>
+                    <p><strong>Java 9+ Example to Get PID:</strong></p>
+                    <pre><code>public class GetPIDExample {
+    public static void main(String[] args) {
+        ProcessHandle processHandle = ProcessHandle.current();
+        long pid = processHandle.pid();
+        System.out.println("Current PID: " + pid);
+    }
+}
+</code></pre>
+                    <p><strong>Process Control Block (PCB):</strong></p>
+                    <ul>
+                        <li>PCB is a data structure used by the operating system to store all information about a process.</li>
+                        <li>It includes process state, program counter, CPU registers, memory management information, etc.</li>
+                        <li>Java abstracts the PCB details; however, you can interact with process attributes via <code>ProcessHandle</code>.</li>
+                    </ul>
+                    <p><strong>Java 9+ Example to Access Process Info:</strong></p>
+                    <pre><code>public class ProcessInfoExample {
+    public static void main(String[] args) {
+        ProcessHandle currentProcess = ProcessHandle.current();
+
+        System.out.println("PID: " + currentProcess.pid());
+        System.out.println("Command: " + currentProcess.info().command().orElse("Unknown"));
+        System.out.println("Start Time: " + currentProcess.info().startInstant().orElse(null));
+    }
+}
+</code></pre>
+                </section>
+                <section id="concurrent-programming">
+                    <h4>Concurrent Programming</h4>
+                    <h5>Understanding Concurrency and Parallelism</h5>
+                    <p><strong>Concurrency:</strong> Multiple tasks making progress over time, potentially interleaving their execution.</p>
+                    <p><strong>Parallelism:</strong> Tasks executing simultaneously on multiple processors or cores.</p>
+                    <h6>Example Illustration:</h6>
+                    <ul>
+                        <li><strong>Concurrency:</strong> Single-core CPU running two threads by rapidly switching between them.</li>
+                        <li><strong>Parallelism:</strong> Multi-core CPU running two threads simultaneously on different cores.</li>
+                    </ul>
+                    <h5>Differences Between Multitasking, Multiprocessing, and Multithreading</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Multitasking</strong></td>
+                                <td>Running multiple tasks (processes) concurrently on a single CPU.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Multiprocessing</strong></td>
+                                <td>Using multiple CPUs or cores to run multiple processes simultaneously.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Multithreading</strong></td>
+                                <td>Running multiple threads within a single process to perform tasks concurrently.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><strong>Java Context:</strong></p>
+                    <ul>
+                        <li><strong>Multitasking:</strong> Multiple Java processes running independently.</li>
+                        <li><strong>Multiprocessing:</strong> Leveraging multiple CPUs/cores via multiple Java processes or a multi-threaded Java process.</li>
+                        <li><strong>Multithreading:</strong> Using multiple threads within a single Java process to perform tasks concurrently.</li>
+                    </ul>
+                    <h6>Java Example: Multithreading vs. Multiprocessing</h6>
+                    <pre><code>// Multithreading Example
+public class MultithreadingExample {
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            System.out.println("Thread " + Thread.currentThread().getId() + " is running.");
+        };
+
+        // Create and start multiple threads
+        for (int i = 0; i < 5; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+</code></pre>
+                    <pre><code>// Multiprocessing Example using ProcessBuilder
+import java.io.IOException;
+
+public class MultiprocessingExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "-cp", ".", "ChildProcess");
+
+        for (int i = 0; i < 5; i++) {
+            try {
+                Process process = processBuilder.start();
+                System.out.println("Started child process with PID: " + process.pid());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+// ChildProcess.java
+public class ChildProcess {
+    public static void main(String[] args) {
+        System.out.println("Child process PID: " + ProcessHandle.current().pid());
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>MultithreadingExample:</strong> Creates and starts 5 threads within the same Java process.</li>
+                        <li><strong>MultiprocessingExample:</strong> Starts 5 separate Java processes, each running <code>ChildProcess</code>.</li>
+                    </ul>
+                </section>
+                <section id="basic-process-control-linux">
+                    <h4>Basic Process Control in Linux</h4>
+                    <p>While Java is platform-independent, you can execute and manage system commands on Linux using Java's <code>ProcessBuilder</code>.</p>
+                    <h5>Using Linux Commands Like <code>ps</code>, <code>kill</code>, and <code>top</code></h5>
+                    <p><strong>Example: Listing Processes Using <code>ps</code></strong></p>
+                    <pre><code>public class ListProcessesExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("ps", "aux");
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            process.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Example: Killing a Process Using <code>kill</code></strong></p>
+                    <pre><code>public class KillProcessExample {
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Usage: java KillProcessExample &lt;PID&gt;");
+            return;
+        }
+
+        String pid = args[0];
+        ProcessBuilder processBuilder = new ProcessBuilder("kill", "-9", pid);
+
+        try {
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Process " + pid + " killed successfully.");
+            } else {
+                System.out.println("Failed to kill process " + pid);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Example: Monitoring Processes Using <code>top</code></strong></p>
+                    <p>Note: <code>top</code> is interactive. To capture a snapshot, use <code>top -b -n 1</code>.</p>
+                    <pre><code>public class TopProcessExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("top", "-b", "-n", "1");
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            process.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <h5>Example Java Programs That Execute System Commands Using <code>ProcessBuilder</code></h5>
+                    <p><strong>Executing a Shell Command and Capturing Output</strong></p>
+                    <pre><code>public class ShellCommandExample {
+    public static void main(String[] args) {
+        String command = "echo Hello from shell";
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", command);
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String output = reader.readLine();
+            System.out.println("Shell Output: " + output);
+
+            int exitCode = process.waitFor();
+            System.out.println("Exited with code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Executes the shell command <code>echo Hello from shell</code>.</li>
+                        <li>Captures and prints the output.</li>
+                    </ul>
+                </section>
+                <section id="handling-io-processes">
+                    <h4>Handling Input/Output in Processes</h4>
+                    <p>Managing the input and output streams of a process allows for interaction between your Java program and the subprocess.</p>
+                    <h5>Redirecting Input/Output in Processes</h5>
+                    <p><strong><code>ProcessBuilder.Redirect</code>:</strong> Provides methods to redirect the standard input, output, and error streams.</p>
+                    <p><strong>Example: Redirecting Output to a File</strong></p>
+                    <pre><code>import java.io.File;
+import java.io.IOException;
+
+public class RedirectOutputExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("ls", "-l");
+        processBuilder.redirectOutput(new File("output.txt"));
+
+        try {
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+            System.out.println("Output redirected to output.txt");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Example: Redirecting Input from a File</strong></p>
+                    <pre><code>import java.io.File;
+import java.io.IOException;
+
+public class RedirectInputExample {
+    public static void main(String[] args) {
+        // Assume 'input.txt' contains commands or data for the process
+        ProcessBuilder processBuilder = new ProcessBuilder("sort");
+        processBuilder.redirectInput(new File("input.txt"));
+        processBuilder.redirectOutput(new File("sorted_output.txt"));
+
+        try {
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+            System.out.println("Sorted output available in sorted_output.txt");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <h5>Using <code>ProcessBuilder.Redirect</code> for Handling Input/Output Streams</h5>
+                    <p><strong>Example: Redirecting Error Stream to a File</strong></p>
+                    <pre><code>import java.io.File;
+import java.io.IOException;
+
+public class RedirectErrorExample {
+    public static void main(String[] args) {
+        // Intentionally using an invalid command to generate an error
+        ProcessBuilder processBuilder = new ProcessBuilder("invalidCommand");
+        processBuilder.redirectError(new File("error.log"));
+
+        try {
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+            System.out.println("Error output redirected to error.log");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Redirects the error stream (<code>stderr</code>) to a file named <code>error.log</code>.</li>
+                    </ul>
+                </section>
+                <section id="interprocess-communication">
+                    <h4>Interprocess Communication</h4>
+                    <p>Java does not provide low-level interprocess communication (IPC) mechanisms like pipes and shared memory directly. However, you can achieve IPC through:</p>
+                    <ol>
+                        <li>Pipes: Using the standard input/output streams between parent and child processes.</li>
+                        <li>Sockets: Establishing communication channels over network protocols (even on the same machine).</li>
+                        <li>Files: Exchanging data via temporary files.</li>
+                    </ol>
+                    <h5>Pipes and Shared Memory for Process Communication</h5>
+                    <h6>Using Pipes in Java: Parent-Child Communication via Standard Streams</h6>
+                    <p><strong>Example: Parent Process Sends Data to Child Process</strong></p>
+                    <pre><code>import java.io.*;
+
+public class ParentProcess {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "ChildProcess");
+        processBuilder.redirectErrorStream(true);
+
+        try {
+            Process process = processBuilder.start();
+
+            // Send data to the child process's standard input
+            BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(process.getOutputStream())
+            );
+            writer.write("Hello from Parent\n");
+            writer.flush();
+            writer.close();
+
+            // Read data from the child process's standard output
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("Child Process Output: " + line);
+            }
+
+            process.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// ChildProcess.java
+public class ChildProcess {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(System.in));
+             BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(System.out))) {
+
+            String message = reader.readLine();
+            System.out.println("Received: " + message);
+            writer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>ParentProcess.java:</strong>
+                            <ul>
+                                <li>Starts <code>ChildProcess</code>.</li>
+                                <li>Writes a message to the child’s standard input.</li>
+                                <li>Reads and prints the child’s standard output.</li>
+                            </ul>
+                        </li>
+                        <li><strong>ChildProcess.java:</strong>
+                            <ul>
+                                <li>Reads from standard input.</li>
+                                <li>Writes a response to standard output.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Running the Example:</strong></p>
+                    <ol>
+                        <li>Compile both classes:
+                            <pre><code>javac ParentProcess.java ChildProcess.java</code></pre>
+                        </li>
+                        <li>Run the parent process:
+                            <pre><code>java ParentProcess</code></pre>
+                        </li>
+                        <li><strong>Output:</strong>
+                            <pre><code>Child Process Output: Received: Hello from Parent</code></pre>
+                        </li>
+                    </ol>
+                    <p><strong>Note:</strong> Ensure both classes are in the same directory and classpath.</p>
+                    <h6>Shared Memory</h6>
+                    <p>Java does not natively support shared memory for IPC. However, you can simulate shared memory using memory-mapped files or third-party libraries.</p>
+                    <p><strong>Example: Using Memory-Mapped Files</strong></p>
+                    <pre><code>import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+
+// Writer.java
+public class SharedMemoryWriter {
+    public static void main(String[] args) {
+        try (RandomAccessFile raf = new RandomAccessFile("shared.dat", "rw");
+             FileChannel channel = raf.getChannel()) {
+
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, 1024);
+            String message = "Hello from Writer!";
+            buffer.put(message.getBytes());
+
+            System.out.println("Message written to shared memory.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// Reader.java
+public class SharedMemoryReader {
+    public static void main(String[] args) {
+        try (RandomAccessFile raf = new RandomAccessFile("shared.dat", "r");
+             FileChannel channel = raf.getChannel()) {
+
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, 1024);
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            String message = new String(bytes).trim();
+
+            System.out.println("Message read from shared memory: " + message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>SharedMemoryWriter.java:</strong>
+                            <ul>
+                                <li>Creates or opens <code>shared.dat</code>.</li>
+                                <li>Maps a 1KB region into memory.</li>
+                                <li>Writes a string into the mapped buffer.</li>
+                            </ul>
+                        </li>
+                        <li><strong>SharedMemoryReader.java:</strong>
+                            <ul>
+                                <li>Opens <code>shared.dat</code>.</li>
+                                <li>Maps the same region into memory.</li>
+                                <li>Reads and prints the string.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Running the Example:</strong></p>
+                    <ol>
+                        <li>Compile both classes:
+                            <pre><code>javac SharedMemoryWriter.java SharedMemoryReader.java</code></pre>
+                        </li>
+                        <li>Run the writer:
+                            <pre><code>java SharedMemoryWriter</code></pre>
+                        </li>
+                        <li>Run the reader:
+                            <pre><code>java SharedMemoryReader</code></pre>
+                        </li>
+                        <li><strong>Output:</strong>
+                            <pre><code>Message read from shared memory: Hello from Writer!</code></pre>
+                        </li>
+                    </ol>
+                    <p><strong>Note:</strong> This method uses a file to simulate shared memory. In a production environment, more sophisticated mechanisms or libraries would be preferable.</p>
+                </section>
+                <section id="parallel-processing-pvm">
+                    <h4>Parallel Processing with PVM (Parallel Virtual Machine)</h4>
+                    <p><strong>PVM (Parallel Virtual Machine)</strong> is a software system that enables a network of computers to be used as a single parallel machine. It allows processes to communicate and synchronize, enabling parallel computation.</p>
+                    <h5>Java and PVM:</h5>
+                    <p>Java does not natively support PVM. However, similar parallel processing can be achieved using other frameworks like <strong>MPI for Java (MPJ)</strong> or <strong>Java Parallel Virtual Machine (JPVM)</strong>.</p>
+                    <h6>Alternative: Using MPI with Java (MPJ)</h6>
+                    <p><strong>Example: Simple MPI Program in Java Using MPJ</strong></p>
+                    <p>1. <strong>Setup MPJ:</strong></p>
+                    <ul>
+                        <li>Download MPJ (e.g., MPJ Express).</li>
+                        <li>Configure your environment to include MPJ libraries.</li>
+                    </ul>
+                    <p>2. <strong>MPI Example Code:</strong></p>
+                    <pre><code>// HelloWorldMPI.java
+import mpi.*;
+
+public class HelloWorldMPI {
+    public static void main(String[] args) throws Exception {
+        MPI.Init(args);
+
+        int rank = MPI.COMM_WORLD.Rank();
+        int size = MPI.COMM_WORLD.Size();
+
+        System.out.println("Hello world from process " + rank + " of " + size);
+
+        MPI.Finalize();
+    }
+}
+</code></pre>
+                    <p><strong>Running the MPI Example:</strong></p>
+                    <ol>
+                        <li><strong>Compile:</strong>
+                            <pre><code>javac -cp .:path_to_mpj/lib/mpj.jar HelloWorldMPI.java</code></pre>
+                        </li>
+                        <li><strong>Run with MPJ:</strong>
+                            <pre><code>mpjrun.sh -np 4 HelloWorldMPI</code></pre>
+                        </li>
+                        <li><strong>Output:</strong>
+                            <pre><code>Hello world from process 0 of 4
+Hello world from process 1 of 4
+Hello world from process 2 of 4
+Hello world from process 3 of 4
+</code></pre>
+                        </li>
+                    </ol>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>MPI Initialization:</strong> Initializes the MPI environment.</li>
+                        <li><strong>Rank and Size:</strong> Each process gets a unique rank and the total number of processes.</li>
+                        <li><strong>Hello Message:</strong> Each process prints its own message.</li>
+                        <li><strong>MPI Finalization:</strong> Cleans up the MPI environment.</li>
+                    </ul>
+                    <p><strong>Note:</strong> Ensure MPJ is correctly installed and configured on your system.</p>
+                </section>
+            </section>
+            <section id="activities">
+                <h3>Activities</h3>
+                <p>Let's reinforce the concepts with practical exercises.</p>
+                <section id="exercise-1">
+                    <h4>Exercise 1: Creating and Managing Processes</h4>
+                    <p><strong>Task:</strong></p>
+                    <ul>
+                        <li>Write a Java program that launches a child process to execute a long-running command (e.g., <code>ping</code>).</li>
+                        <li>Monitor the child process and terminate it after a certain period.</li>
+                    </ul>
+                    <p><strong>Solution:</strong></p>
+                    <pre><code>public class ProcessMonitor {
+    public static void main(String[] args) {
+        // Command to execute (Ping localhost 100 times)
+        ProcessBuilder processBuilder = new ProcessBuilder("ping", "-c", "100", "localhost");
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("Ping process started with PID: " + process.pid());
+
+            // Wait for 5 seconds before terminating
+            Thread.sleep(5000);
+
+            process.destroy(); // Gracefully terminate
+            System.out.println("Ping process terminated.");
+
+            int exitCode = process.waitFor();
+            System.out.println("Ping exited with code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Starts a <code>ping</code> process.</li>
+                        <li>Waits for 5 seconds.</li>
+                        <li>Terminates the <code>ping</code> process.</li>
+                        <li>Prints the exit code.</li>
+                    </ul>
+                    <p><strong>Note:</strong> Adjust the <code>ping</code> command parameters based on your operating system (<code>-c</code> for Unix-like systems, <code>-n</code> for Windows).</p>
+                </section>
+                <section id="exercise-2">
+                    <h4>Exercise 2: Interprocess Communication Using Pipes</h4>
+                    <p><strong>Task:</strong></p>
+                    <ul>
+                        <li>Implement a parent Java process that sends a series of numbers to a child process.</li>
+                        <li>The child process calculates the sum and returns the result to the parent.</li>
+                    </ul>
+                    <p><strong>Solution:</strong></p>
+                    <pre><code>// ParentProcessIPC.java
+import java.io.*;
+
+public class ParentProcessIPC {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "ChildProcessIPC");
+        processBuilder.redirectErrorStream(true);
+
+        try {
+            Process process = processBuilder.start();
+
+            // Send numbers to child
+            BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(process.getOutputStream())
+            );
+
+            for (int i = 1; i <= 5; i++) {
+                writer.write(i + "\n");
+            }
+            writer.write("END\n"); // Signal end of input
+            writer.flush();
+            writer.close();
+
+            // Read sum from child
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("Sum from Child: " + line);
+            }
+
+            process.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// ChildProcessIPC.java
+public class ChildProcessIPC {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(System.in));
+             BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(System.out))) {
+
+            String line;
+            int sum = 0;
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("END")) {
+                    break;
+                }
+                try {
+                    int num = Integer.parseInt(line);
+                    sum += num;
+                } catch (NumberFormatException e) {
+                    // Ignore invalid input
+                }
+            }
+
+            writer.write(String.valueOf(sum));
+            writer.newLine();
+            writer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>ParentProcessIPC.java:</strong>
+                            <ul>
+                                <li>Starts <code>ChildProcessIPC</code>.</li>
+                                <li>Sends numbers <code>1</code> to <code>5</code> to the child’s standard input.</li>
+                                <li>Sends <code>END</code> to signal the end of input.</li>
+                                <li>Reads and prints the sum from the child’s standard output.</li>
+                            </ul>
+                        </li>
+                        <li><strong>ChildProcessIPC.java:</strong>
+                            <ul>
+                                <li>Reads numbers from standard input until it encounters <code>END</code>.</li>
+                                <li>Calculates the sum and writes it to standard output.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Running the Exercise:</strong></p>
+                    <ol>
+                        <li>Compile both classes:
+                            <pre><code>javac ParentProcessIPC.java ChildProcessIPC.java</code></pre>
+                        </li>
+                        <li>Run the parent process:
+                            <pre><code>java ParentProcessIPC</code></pre>
+                        </li>
+                        <li><strong>Output:</strong>
+                            <pre><code>Sum from Child: 15</code></pre>
+                        </li>
+                    </ol>
+                </section>
+            </section>
+        </section>
+        <section id="psp-tema-2">
+            <h2>PSP Tema 2 - Multithreading Programming</h2>
+            <section id="chapter-2">
+                <h3>Chapter 2: Multithreading Programming</h3>
+                <section id="introduction-to-threads">
+                    <h4>Introduction to Threads</h4>
+                    <h5>Explanation of Threads as Lightweight Processes</h5>
+                    <p><strong>Thread:</strong> The smallest unit of processing that can be scheduled by an operating system. Threads share the same memory space within a process.</p>
+                    <p><strong>Lightweight Process:</strong> Threads are considered lightweight because they consume fewer resources compared to processes. They share the same code, data, and resources.</p>
+                    <h6>Advantages of Threads:</h6>
+                    <ol>
+                        <li><strong>Responsiveness:</strong> Improved application responsiveness by performing tasks in parallel.</li>
+                        <li><strong>Resource Sharing:</strong> Easier data sharing between threads within the same process.</li>
+                        <li><strong>Efficiency:</strong> Lower overhead compared to managing multiple processes.</li>
+                    </ol>
+                    <h5>The Distinction Between Threads and Processes</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Thread</th>
+                                <th>Process</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Memory</td>
+                                <td>Shared with other threads in the same process</td>
+                                <td>Isolated memory space</td>
+                            </tr>
+                            <tr>
+                                <td>Creation Time</td>
+                                <td>Faster to create and terminate</td>
+                                <td>Slower to create and terminate</td>
+                            </tr>
+                            <tr>
+                                <td>Communication</td>
+                                <td>Direct access to shared data</td>
+                                <td>Requires IPC mechanisms</td>
+                            </tr>
+                            <tr>
+                                <td>Resource Usage</td>
+                                <td>Less resource-intensive</td>
+                                <td>More resource-intensive</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><strong>Java Context:</strong></p>
+                    <ul>
+                        <li>In Java, multiple threads run within the same JVM process, sharing the same memory and resources.</li>
+                    </ul>
+                    <h6>Example: Comparing Threads and Processes</h6>
+                    <ul>
+                        <li><strong>Threads:</strong> Used for concurrent tasks like handling multiple client requests in a server.</li>
+                        <li><strong>Processes:</strong> Used for executing separate applications or services independently.</li>
+                    </ul>
+                </section>
+                <section id="creating-threads-java">
+                    <h4>Creating Threads in Java</h4>
+                    <p>Java provides two primary ways to create threads:</p>
+                    <ol>
+                        <li>Extending the <code>Thread</code> Class</li>
+                        <li>Implementing the <code>Runnable</code> Interface</li>
+                    </ol>
+                    <h5>Creating Threads by Extending the <code>Thread</code> Class</h5>
+                    <p><strong>Example: Extending <code>Thread</code></strong></p>
+                    <pre><code>public class ThreadExtensionExample extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread extended from Thread class is running. Thread ID: " + this.getId());
+    }
+
+    public static void main(String[] args) {
+        ThreadExtensionExample thread = new ThreadExtensionExample();
+        thread.start(); // Starts the thread
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>Extending <code>Thread</code>:</strong> Create a subclass of <code>Thread</code> and override the <code>run()</code> method.</li>
+                        <li><strong>Starting the Thread:</strong> Call the <code>start()</code> method to begin execution, which invokes the <code>run()</code> method in a new thread.</li>
+                    </ul>
+                    <h5>Creating Threads by Implementing the <code>Runnable</code> Interface</h5>
+                    <p><strong>Example: Implementing <code>Runnable</code></strong></p>
+                    <pre><code>public class RunnableExample implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread implemented from Runnable is running. Thread ID: " + Thread.currentThread().getId());
+    }
+
+    public static void main(String[] args) {
+        RunnableExample runnable = new RunnableExample();
+        Thread thread = new Thread(runnable);
+        thread.start(); // Starts the thread
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>Implementing <code>Runnable</code>:</strong> Create a class that implements the <code>Runnable</code> interface and override the <code>run()</code> method.</li>
+                        <li><strong>Creating a <code>Thread</code>:</strong> Instantiate a <code>Thread</code> object, passing the <code>Runnable</code> instance to the constructor.</li>
+                        <li><strong>Starting the Thread:</strong> Call the <code>start()</code> method to begin execution.</li>
+                    </ul>
+                    <h5>Advantages of Implementing <code>Runnable</code> Over Extending <code>Thread</code></h5>
+                    <ol>
+                        <li><strong>Inheritance Flexibility:</strong> Java allows a class to implement multiple interfaces but not extend multiple classes. Implementing <code>Runnable</code> provides greater flexibility.</li>
+                        <li><strong>Separation of Task and Execution:</strong> <code>Runnable</code> separates the task (code to run) from the thread execution mechanism.</li>
+                    </ol>
+                    <p><strong>Example: Implementing <code>Runnable</code> for Multiple Threads</strong></p>
+                    <pre><code>public class MultiThreadRunnable implements Runnable {
+    private String threadName;
+
+    public MultiThreadRunnable(String name) {
+        this.threadName = name;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Thread " + threadName + " is running. Thread ID: " + Thread.currentThread().getId());
+    }
+
+    public static void main(String[] args) {
+        Runnable task1 = new MultiThreadRunnable("Alpha");
+        Runnable task2 = new MultiThreadRunnable("Beta");
+
+        Thread thread1 = new Thread(task1);
+        Thread thread2 = new Thread(task2);
+
+        thread1.start();
+        thread2.start();
+    }
+}
+</code></pre>
+                    <p><strong>Output:</strong></p>
+                    <pre><code>Thread Alpha is running. Thread ID: 12
+Thread Beta is running. Thread ID: 13
+</code></pre>
+                </section>
+                <section id="thread-synchronization">
+                    <h4>Thread Synchronization</h4>
+                    <h5>Handling Concurrency Issues Like Race Conditions</h5>
+                    <p><strong>Race Condition:</strong> Occurs when multiple threads access and modify shared data concurrently without proper synchronization, leading to inconsistent or unexpected results.</p>
+                    <h6>Example Without Synchronization:</h6>
+                    <pre><code>public class RaceConditionExample {
+    private int counter = 0;
+
+    public void increment() {
+        counter++; // Not synchronized
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        RaceConditionExample example = new RaceConditionExample();
+
+        // Create two threads that increment the counter 1000 times each
+        Thread t1 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+</code></pre>
+                    <p><strong>Possible Output:</strong></p>
+                    <pre><code>Final Counter Value: 1987
+</code></pre>
+                    <p><strong>Explanation:</strong> Due to the lack of synchronization, both threads may interfere with each other while updating <code>counter</code>, resulting in an incorrect final value.</p>
+                    <h5>Synchronization Mechanisms Using Synchronized Methods and Blocks</h5>
+                    <h6>Solution: Synchronize the <code>increment</code> Method</h6>
+                    <pre><code>public class SynchronizedExample {
+    private int counter = 0;
+
+    // Synchronized method to prevent race conditions
+    public synchronized void increment() {
+        counter++;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SynchronizedExample example = new SynchronizedExample();
+
+        // Create two threads that increment the counter 1000 times each
+        Thread t1 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+</code></pre>
+                    <p><strong>Possible Output:</strong></p>
+                    <pre><code>Final Counter Value: 2000
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>The <code>synchronized</code> keyword ensures that only one thread can execute the <code>increment</code> method at a time, preventing race conditions.</li>
+                    </ul>
+                    <h6>Using Synchronized Blocks</h6>
+                    <pre><code>public class SynchronizedBlockExample {
+    private int counter = 0;
+    private final Object lock = new Object();
+
+    public void increment() {
+        synchronized (lock) { // Synchronize on a specific object
+            counter++;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SynchronizedBlockExample example = new SynchronizedBlockExample();
+
+        // Create two threads that increment the counter 1000 times each
+        Thread t1 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>Synchronized Block:</strong> Synchronizes only the critical section (<code>counter++</code>), which can improve performance by reducing the scope of synchronization.</li>
+                    </ul>
+                    <h5>Using <code>java.util.concurrent.locks</code> for Advanced Thread Management</h5>
+                    <p>Java provides the <code>Lock</code> interface and its implementations in the <code>java.util.concurrent.locks</code> package for more advanced synchronization capabilities.</p>
+                    <h6>Example: Using <code>ReentrantLock</code></h6>
+                    <pre><code>import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private int counter = 0;
+    private final Lock lock = new ReentrantLock();
+
+    public void increment() {
+        lock.lock(); // Acquire the lock
+        try {
+            counter++;
+        } finally {
+            lock.unlock(); // Ensure the lock is released
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        // Create two threads that increment the counter 1000 times each
+        Thread t1 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+</code></pre>
+                    <p><strong>Advantages of Using Locks:</strong></p>
+                    <ol>
+                        <li><strong>Flexibility:</strong> Lock provides more control over synchronization compared to the <code>synchronized</code> keyword.</li>
+                        <li><strong>Try Lock:</strong> Ability to attempt to acquire the lock without blocking indefinitely.</li>
+                        <li><strong>Fairness:</strong> Can be configured to grant locks in a first-come-first-served manner.</li>
+                    </ol>
+                    <p><strong>Example: Using <code>tryLock</code></strong></p>
+                    <pre><code>public void incrementWithTryLock() {
+    if (lock.tryLock()) {
+        try {
+            counter++;
+        } finally {
+            lock.unlock();
+        }
+    } else {
+        System.out.println("Could not acquire lock");
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><code>tryLock()</code> attempts to acquire the lock without waiting. If the lock is not available, it returns <code>false</code>.</li>
+                    </ul>
+                </section>
+                <section id="thread-management">
+                    <h4>Thread Management in Java</h4>
+                    <h5>Thread Lifecycle: New, Runnable, Blocked, and Terminated States</h5>
+                    <p><strong>Thread States in Java:</strong></p>
+                    <ol>
+                        <li><strong>New:</strong> The thread is created but not yet started.</li>
+                        <li><strong>Runnable:</strong> The thread is ready to run and waiting for CPU time.</li>
+                        <li><strong>Blocked/Waiting:</strong> The thread is waiting for a monitor lock or another thread's action.</li>
+                        <li><strong>Terminated:</strong> The thread has finished execution.</li>
+                    </ol>
+                    <p><strong>Visual Representation:</strong></p>
+                    <pre><code>New -&gt; Runnable -&gt; Running -&gt; Blocked/Waiting -&gt; Runnable -&gt; Terminated
+</code></pre>
+                    <h5>Methods for Thread Control: <code>sleep()</code>, <code>interrupt()</code>, <code>join()</code>, and <code>yield()</code></h5>
+                    <h6><code>sleep(long millis)</code></h6>
+                    <p><strong>Purpose:</strong> Causes the currently executing thread to sleep (temporarily cease execution) for the specified number of milliseconds.</p>
+                    <p><strong>Example: Using <code>sleep</code></strong></p>
+                    <pre><code>public class SleepExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -&gt; {
+            System.out.println("Thread started.");
+            try {
+                Thread.sleep(3000); // Sleep for 3 seconds
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted.");
+            }
+            System.out.println("Thread resumed after sleep.");
+        });
+
+        thread.start();
+    }
+}
+</code></pre>
+                    <p><strong>Output:</strong></p>
+                    <pre><code>Thread started.
+(Thread sleeps for 3 seconds)
+Thread resumed after sleep.
+</code></pre>
+                    <h6><code>interrupt()</code></h6>
+                    <p><strong>Purpose:</strong> Interrupts a thread, causing it to throw an <code>InterruptedException</code> if it's blocked in certain methods like <code>sleep()</code> or <code>wait()</code>.</p>
+                    <p><strong>Example: Using <code>interrupt</code></strong></p>
+                    <pre><code>public class InterruptExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -&gt; {
+            System.out.println("Thread started.");
+            try {
+                Thread.sleep(5000); // Sleep for 5 seconds
+            } catch (InterruptedException e) {
+                System.out.println("Thread was interrupted!");
+            }
+            System.out.println("Thread ended.");
+        });
+
+        thread.start();
+
+        try {
+            Thread.sleep(2000); // Main thread sleeps for 2 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        thread.interrupt(); // Interrupt the sleeping thread
+    }
+}
+</code></pre>
+                    <p><strong>Output:</strong></p>
+                    <pre><code>Thread started.
+(Thread sleeps for 5 seconds)
+Thread was interrupted!
+Thread ended.
+</code></pre>
+                    <h6><code>join()</code></h6>
+                    <p><strong>Purpose:</strong> Causes the current thread to wait until the specified thread completes its execution.</p>
+                    <p><strong>Example: Using <code>join</code></strong></p>
+                    <pre><code>public class JoinExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -&gt; {
+            System.out.println("Thread started.");
+            try {
+                Thread.sleep(3000); // Sleep for 3 seconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Thread ended.");
+        });
+
+        thread.start();
+
+        try {
+            System.out.println("Main thread waiting for child thread to finish.");
+            thread.join(); // Wait for the child thread to finish
+            System.out.println("Child thread has finished.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Output:</strong></p>
+                    <pre><code>Thread started.
+Main thread waiting for child thread to finish.
+(Thread sleeps for 3 seconds)
+Thread ended.
+Child thread has finished.
+</code></pre>
+                    <h6><code>yield()</code></h6>
+                    <p><strong>Purpose:</strong> Causes the currently executing thread to temporarily pause and allow other threads to execute.</p>
+                    <p><strong>Example: Using <code>yield</code></strong></p>
+                    <pre><code>public class YieldExample {
+    public static void main(String[] args) {
+        Runnable task = () -&gt; {
+            for(int i=0; i&lt;5; i++) {
+                System.out.println(Thread.currentThread().getName() + " is running.");
+                Thread.yield(); // Hint to scheduler
+            }
+        };
+
+        Thread t1 = new Thread(task, "Thread-1");
+        Thread t2 = new Thread(task, "Thread-2");
+
+        t1.start();
+        t2.start();
+    }
+}
+</code></pre>
+                    <p><strong>Possible Output:</strong></p>
+                    <pre><code>Thread-1 is running.
+Thread-2 is running.
+Thread-1 is running.
+Thread-2 is running.
+...
+</code></pre>
+                    <p><strong>Note:</strong> The behavior of <code>yield()</code> is platform-dependent and does not guarantee specific thread scheduling.</p>
+                </section>
+                <section id="thread-priorities">
+                    <h4>Thread Priorities</h4>
+                    <h5>Managing Thread Priorities in Java with <code>setPriority()</code> and <code>getPriority()</code></h5>
+                    <p>Java threads have priorities that influence the order in which threads are scheduled for execution. The priority range is from <code>Thread.MIN_PRIORITY</code> (1) to <code>Thread.MAX_PRIORITY</code> (10), with <code>Thread.NORM_PRIORITY</code> (5) as the default.</p>
+                    <p><strong>Example: Setting Thread Priorities</strong></p>
+                    <pre><code>public class ThreadPriorityExample {
+    public static void main(String[] args) {
+        Runnable lowPriorityTask = () -&gt; {
+            for(int i=0; i&lt;5; i++) {
+                System.out.println(Thread.currentThread().getName() + " (Priority: " + Thread.currentThread().getPriority() + ") is running.");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {}
+            }
+        };
+
+        Runnable highPriorityTask = () -&gt; {
+            for(int i=0; i&lt;5; i++) {
+                System.out.println(Thread.currentThread().getName() + " (Priority: " + Thread.currentThread().getPriority() + ") is running.");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {}
+            }
+        };
+
+        Thread lowPriorityThread = new Thread(lowPriorityTask, "LowPriorityThread");
+        Thread highPriorityThread = new Thread(highPriorityTask, "HighPriorityThread");
+
+        lowPriorityThread.setPriority(Thread.MIN_PRIORITY); // Priority 1
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY); // Priority 10
+
+        lowPriorityThread.start();
+        highPriorityThread.start();
+    }
+}
+</code></pre>
+                    <p><strong>Possible Output:</strong></p>
+                    <pre><code>HighPriorityThread (Priority: 10) is running.
+HighPriorityThread (Priority: 10) is running.
+...
+LowPriorityThread (Priority: 1) is running.
+LowPriorityThread (Priority: 1) is running.
+...
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Threads with higher priority are more likely to be scheduled before lower-priority threads.</li>
+                        <li><strong>Note:</strong> Thread scheduling is platform-dependent, and Java does not guarantee strict priority enforcement.</li>
+                    </ul>
+                    <h5>Example Programs Illustrating Thread Priority and Its Effect on Execution</h5>
+                    <p><strong>Example: Impact of Thread Priorities</strong></p>
+                    <pre><code>public class PriorityImpactExample {
+    public static void main(String[] args) {
+        Runnable highPriorityTask = () -&gt; {
+            for(int i=0; i&lt;5; i++) {
+                System.out.println("High Priority Task");
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {}
+            }
+        };
+
+        Runnable lowPriorityTask = () -&gt; {
+            for(int i=0; i&lt;5; i++) {
+                System.out.println("Low Priority Task");
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {}
+            }
+        };
+
+        Thread highPriorityThread = new Thread(highPriorityTask);
+        Thread lowPriorityThread = new Thread(lowPriorityTask);
+
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY); // Priority 10
+        lowPriorityThread.setPriority(Thread.MIN_PRIORITY); // Priority 1
+
+        highPriorityThread.start();
+        lowPriorityThread.start();
+    }
+}
+</code></pre>
+                    <p><strong>Possible Output:</strong></p>
+                    <pre><code>High Priority Task
+High Priority Task
+High Priority Task
+High Priority Task
+High Priority Task
+Low Priority Task
+Low Priority Task
+Low Priority Task
+Low Priority Task
+Low Priority Task
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Due to higher priority, the <code>HighPriorityTask</code> may complete before the <code>LowPriorityTask</code> starts.</li>
+                        <li>However, actual behavior can vary based on the JVM and underlying OS thread scheduler.</li>
+                    </ul>
+                </section>
+                <section id="advanced-threading">
+                    <h4>Advanced Threading: Deadlock and Starvation</h4>
+                    <h5>Understanding Deadlocks and How to Avoid Them</h5>
+                    <p><strong>Deadlock:</strong> A situation where two or more threads are blocked forever, each waiting for the other to release a resource.</p>
+                    <h6>Conditions for Deadlock (Coffman Conditions):</h6>
+                    <ol>
+                        <li><strong>Mutual Exclusion:</strong> At least one resource is held in a non-shareable mode.</li>
+                        <li><strong>Hold and Wait:</strong> A thread holding at least one resource is waiting to acquire additional resources held by other threads.</li>
+                        <li><strong>No Preemption:</strong> Resources cannot be forcibly removed from threads.</li>
+                        <li><strong>Circular Wait:</strong> A circular chain of threads exists, where each thread holds a resource needed by the next thread in the chain.</li>
+                    </ol>
+                    <h6>Example of Deadlock:</h6>
+                    <pre><code>public class DeadlockExample {
+    private final Object resource1 = new Object();
+    private final Object resource2 = new Object();
+
+    public void methodA() {
+        synchronized (resource1) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            synchronized (resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public void methodB() {
+        synchronized (resource2) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            synchronized (resource1) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        DeadlockExample example = new DeadlockExample();
+
+        Thread t1 = new Thread(() -&gt; {
+            example.methodA();
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            example.methodB();
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>Thread 1:</strong> Acquires <code>resource1</code> then tries to acquire <code>resource2</code>.</li>
+                        <li><strong>Thread 2:</strong> Acquires <code>resource2</code> then tries to acquire <code>resource1</code>.</li>
+                        <li>Both threads wait indefinitely for each other to release the needed resource, resulting in a deadlock.</li>
+                    </ul>
+                    <h5>Avoiding Deadlocks</h5>
+                    <h6>1. Lock Ordering</h6>
+                    <p>Ensure that all threads acquire locks in the same order.</p>
+                    <p><strong>Revised Example with Lock Ordering:</strong></p>
+                    <pre><code>public class DeadlockAvoidanceExample {
+    private final Object resource1 = new Object();
+    private final Object resource2 = new Object();
+
+    // Both methods acquire locks in the same order
+    public void methodA() {
+        synchronized (resource1) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            synchronized (resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public void methodB() {
+        synchronized (resource1) { // Acquiring resource1 first
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            synchronized (resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        DeadlockAvoidanceExample example = new DeadlockAvoidanceExample();
+
+        Thread t1 = new Thread(() -&gt; {
+            example.methodA();
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            example.methodB();
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li>Both <code>methodA</code> and <code>methodB</code> acquire <code>resource1</code> before <code>resource2</code>, preventing circular wait and thus avoiding deadlock.</li>
+                    </ul>
+                    <h6>2. Timeouts</h6>
+                    <p>Use timeouts when attempting to acquire locks, allowing threads to back off if unable to acquire all required locks.</p>
+                    <p><strong>Example Using <code>tryLock</code> with Timeout:</strong></p>
+                    <pre><code>import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.TimeUnit;
+
+public class DeadlockTimeoutExample {
+    private final Lock lock1 = new ReentrantLock();
+    private final Lock lock2 = new ReentrantLock();
+
+    public void methodA() {
+        try {
+            if(lock1.tryLock(100, TimeUnit.MILLISECONDS)) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Lock1");
+                Thread.sleep(50);
+                if(lock2.tryLock(100, TimeUnit.MILLISECONDS)) {
+                    try {
+                        System.out.println("Thread " + Thread.currentThread().getId() + " acquired Lock2");
+                    } finally {
+                        lock2.unlock();
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            if(lock1.isHeldByCurrentThread()) {
+                lock1.unlock();
+            }
+        }
+    }
+
+    public void methodB() {
+        try {
+            if(lock2.tryLock(100, TimeUnit.MILLISECONDS)) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Lock2");
+                Thread.sleep(50);
+                if(lock1.tryLock(100, TimeUnit.MILLISECONDS)) {
+                    try {
+                        System.out.println("Thread " + Thread.currentThread().getId() + " acquired Lock1");
+                    } finally {
+                        lock1.unlock();
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            if(lock2.isHeldByCurrentThread()) {
+                lock2.unlock();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        DeadlockTimeoutExample example = new DeadlockTimeoutExample();
+
+        Thread t1 = new Thread(() -&gt; {
+            example.methodA();
+        });
+
+        Thread t2 = new Thread(() -&gt; {
+            example.methodB();
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong><code>tryLock(long timeout, TimeUnit unit)</code>:</strong> Attempts to acquire the lock within the specified timeout.</li>
+                        <li>If a thread cannot acquire both locks within the timeout, it releases any held locks, preventing deadlock.</li>
+                    </ul>
+                    <h5>Managing Shared Resources to Prevent Starvation</h5>
+                    <p><strong>Starvation:</strong> Occurs when a thread is perpetually denied access to resources, preventing it from making progress.</p>
+                    <h6>Strategies to Prevent Starvation:</h6>
+                    <ol>
+                        <li><strong>Fair Locking:</strong> Use fair locks that grant access in the order threads requested it.</li>
+                        <li><strong>Avoid High-Priority Threads:</strong> Prevent high-priority threads from monopolizing resources.</li>
+                        <li><strong>Ensure Equal Opportunity:</strong> Design synchronization mechanisms to ensure all threads get a chance to execute.</li>
+                    </ol>
+                    <p><strong>Example: Using Fair <code>ReentrantLock</code></strong></p>
+                    <pre><code>import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class StarvationPreventionExample {
+    private final Lock lock = new ReentrantLock(true); // Fair lock
+
+    public void accessResource(String threadName) {
+        lock.lock();
+        try {
+            System.out.println(threadName + " acquired the lock.");
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println(threadName + " released the lock.");
+            lock.unlock();
+        }
+    }
+
+    public static void main(String[] args) {
+        StarvationPreventionExample example = new StarvationPreventionExample();
+
+        Runnable task = () -&gt; {
+            String threadName = Thread.currentThread().getName();
+            example.accessResource(threadName);
+        };
+
+        // Create multiple threads
+        for(int i=1; i&lt;=5; i++) {
+            Thread t = new Thread(task, "Thread-" + i);
+            t.start();
+        }
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ul>
+                        <li><strong>Fair Lock (<code>ReentrantLock(true)</code>):</strong> Ensures that threads acquire the lock in the order they requested it, preventing starvation.</li>
+                    </ul>
+                    <p><strong>Output:</strong></p>
+                    <pre><code>Thread-1 acquired the lock.
+Thread-1 released the lock.
+Thread-2 acquired the lock.
+Thread-2 released the lock.
+...
+</code></pre>
+                    <p><strong>Note:</strong> Fair locks can reduce throughput and increase context switching overhead.</p>
+                </section>
+                <section id="multithreading-gui">
+                    <h4>Multithreading in GUI Applications</h4>
+                    <p>Java provides the <strong>Swing</strong> framework for creating graphical user interfaces (GUIs). Proper multithreading ensures that the GUI remains responsive while performing background tasks.</p>
+                    <h5>Creating Multithreaded Graphical Applications with Java Swing</h5>
+                    <p><strong>Key Principle:</strong></p>
+                    <ul>
+                        <li><strong>Event Dispatch Thread (EDT):</strong> All GUI updates must occur on the EDT to prevent thread-safety issues.</li>
+                        <li><strong>Background Tasks:</strong> Long-running tasks should be executed in separate threads to avoid blocking the EDT.</li>
+                    </ul>
+                    <p><strong>Example: Swing Application with Background Thread</strong></p>
+                    <pre><code>import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class SwingMultithreadExample extends JFrame {
+    private JButton startButton;
+    private JLabel statusLabel;
+
+    public SwingMultithreadExample() {
+        setTitle("Swing Multithreading Example");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        startButton = new JButton("Start Task");
+        statusLabel = new JLabel("Status: Idle");
+
+        add(startButton);
+        add(statusLabel);
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startButton.setEnabled(false);
+                statusLabel.setText("Status: Running...");
+
+                // Start a background thread
+                new Thread(() -&gt; {
+                    // Simulate long-running task
+                    try {
+                        Thread.sleep(5000); // 5 seconds
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    // Update GUI on EDT
+                    SwingUtilities.invokeLater(() -&gt; {
+                        statusLabel.setText("Status: Completed!");
+                        startButton.setEnabled(true);
+                    });
+                }).start();
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -&gt; {
+            SwingMultithreadExample example = new SwingMultithreadExample();
+            example.setVisible(true);
+        });
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>GUI Components:</strong> A button to start the task and a label to show status.</li>
+                        <li><strong>Action Listener:</strong> When the button is clicked:
+                            <ul>
+                                <li>Disables the button.</li>
+                                <li>Updates the status label.</li>
+                                <li>Starts a new background thread to perform the task.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Background Thread:</strong>
+                            <ul>
+                                <li>Simulates a long-running task using <code>Thread.sleep</code>.</li>
+                                <li>Updates the GUI upon completion using <code>SwingUtilities.invokeLater</code> to ensure updates occur on the EDT.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Advantages:</strong></p>
+                    <ul>
+                        <li><strong>Responsiveness:</strong> The GUI remains responsive while the background task executes.</li>
+                        <li><strong>Thread Safety:</strong> Ensures that all GUI updates are performed on the EDT, maintaining thread safety.</li>
+                    </ul>
+                    <h5>Example of Using Threads in Applets for Animation and User Interaction</h5>
+                    <p><strong>Note:</strong> Applets are deprecated and removed from modern Java versions. Instead, Java Swing or JavaFX is recommended for GUI applications.</p>
+                    <h6>Alternative: Using Threads in a Swing Application for Animation</h6>
+                    <pre><code>import javax.swing.*;
+import java.awt.*;
+
+public class AnimationExample extends JPanel implements Runnable {
+    private int x = 0;
+    private int y = 50;
+
+    public AnimationExample() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.fillOval(x, y, 30, 30); // Draw a circle
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            x += 5;
+            if(x &gt; getWidth()) {
+                x = 0;
+            }
+            repaint(); // Request a repaint
+            try {
+                Thread.sleep(100); // Control animation speed
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Animation Example");
+        AnimationExample animation = new AnimationExample();
+        frame.add(animation);
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
+</code></pre>
+                    <p><strong>Explanation:</strong></p>
+                    <ol>
+                        <li><strong>AnimationExample Class:</strong>
+                            <ul>
+                                <li>Extends <code>JPanel</code> and implements <code>Runnable</code>.</li>
+                                <li>Contains an <code>x</code> and <code>y</code> coordinate for the circle.</li>
+                                <li>Starts a new thread in the constructor to handle animation.</li>
+                            </ul>
+                        </li>
+                        <li><strong>paintComponent Method:</strong>
+                            <ul>
+                                <li>Draws a circle at the current <code>(x, y)</code> position.</li>
+                            </ul>
+                        </li>
+                        <li><strong>run Method:</strong>
+                            <ul>
+                                <li>Continuously updates the <code>x</code> coordinate.</li>
+                                <li>Calls <code>repaint()</code> to refresh the GUI.</li>
+                                <li>Sleeps for 100 milliseconds to control the animation speed.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Main Method:</strong>
+                            <ul>
+                                <li>Creates a <code>JFrame</code>, adds the animation panel, and displays it.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Result:</strong></p>
+                    <ul>
+                        <li>A circle moves horizontally across the window, looping back to the start once it reaches the end.</li>
+                    </ul>
+                    <p>This animation ensures that the GUI remains responsive while the animation runs in a separate thread.</p>
+                </section>
+            
+                <!-- Summary Section -->
+                <section id="summary">
+                    <h2>Summary</h2>
+                    <p>
+                        In this comprehensive guide, we've explored both <strong>Process Programming</strong> and <strong>Multithreading Programming</strong> in Java. 
+                        We've delved into key concepts such as the distinction between processes and programs, process creation and management using 
+                        <code>ProcessBuilder</code>, handling input/output streams, and interprocess communication. On the multithreading side, 
+                        we've covered thread creation methods, synchronization mechanisms to prevent race conditions, thread lifecycle management, 
+                        thread priorities, and advanced topics like deadlock and starvation. Practical examples and exercises have been provided 
+                        throughout to reinforce these concepts and demonstrate their application in real-world scenarios.
+                    </p>
+                </section>
+            
+                <!-- Further Activities Section -->
+                <section id="activities">
+                    <h2>Further Activities</h2>
+                    <ol>
+                        <li><strong>Implement a Producer-Consumer Problem:</strong>
+                            <ul>
+                                <li>Use threads to simulate producers generating data and consumers processing it.</li>
+                                <li>Utilize <code>synchronized</code>, <code>wait()</code>, and <code>notify()</code> for coordination.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Build a Simple Chat Application Using Sockets:</strong>
+                            <ul>
+                                <li>Create a server and multiple clients.</li>
+                                <li>Handle concurrent client connections using threads.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Develop a GUI Application with Multiple Background Tasks:</strong>
+                            <ul>
+                                <li>Implement features like progress bars and status updates.</li>
+                                <li>Ensure the GUI remains responsive during long-running operations.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Experiment with Deadlock Scenarios:</strong>
+                            <ul>
+                                <li>Create various deadlock situations.</li>
+                                <li>Apply different strategies to avoid or resolve deadlocks.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Explore Java's <code>java.util.concurrent</code> Package:</strong>
+                            <ul>
+                                <li>Use higher-level concurrency utilities like <code>ExecutorService</code>, <code>Semaphore</code>, <code>CountDownLatch</code>, and <code>Concurrent Collections</code> for advanced multithreading scenarios.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+            </main>
+            
+            <!-- Footer Section -->
+            <footer>
+                <p>&copy; 2024 Process and Multithreading Programming in Java Guide. All rights reserved.</p>
+            </footer>
+            </body>
+            </html>
+                

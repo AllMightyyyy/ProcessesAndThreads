@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Common Code Snippets - Process and Thread Manipulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            color: #f5f5f5;
+            background-color: #2d2d2d;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #ecf0f1;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Java Common Code Snippets</h1>
+        <p>Reusable Code for Process and Thread Manipulation</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#process-manipulation">Process Manipulation</a></li>
+            <li><a href="#thread-manipulation">Thread Manipulation</a></li>
+            <li><a href="#synchronization">Synchronization</a></li>
+            <li><a href="#interprocess-communication">Interprocess Communication</a></li>
+            <li><a href="#advanced-topics">Advanced Topics</a></li>
+            <li><a href="#utilities">Utilities</a></li>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#further-activities">Further Activities</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- Process Manipulation Section -->
+        <section id="process-manipulation">
+            <h2>Process Manipulation</h2>
+            <p>Manage operating system processes directly from your Java application using the <code>ProcessBuilder</code> and <code>Runtime</code> classes.</p>
+            
+            <h3>Creating and Starting a Process</h3>
+            <pre><code>// Using ProcessBuilder to start a process
+import java.io.IOException;
+
+public class ProcessCreationExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe"); // Example for Windows
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("Process started with PID: " + process.pid());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+
+            <h3>Executing System Commands</h3>
+            <pre><code>// Executing a system command and reading output
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class ExecuteCommandExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+
+        // For Windows
+        // processBuilder.command("cmd.exe", "/c", "dir");
+
+        // For Unix/Linux/Mac
+        processBuilder.command("bash", "-c", "ls -l");
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("\nExited with code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+
+            <h3>Terminating a Process</h3>
+            <pre><code>// Terminating a process after a timeout
+import java.io.IOException;
+
+public class TerminateProcessExample {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("ping", "localhost"); // Example command
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("Process started with PID: " + process.pid());
+
+            // Let the process run for 5 seconds
+            Thread.sleep(5000);
+
+            process.destroy(); // Gracefully terminate
+            System.out.println("Process terminated.");
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Thread Manipulation Section -->
+        <section id="thread-manipulation">
+            <h2>Thread Manipulation</h2>
+            <p>Create and manage threads in Java using various approaches to achieve concurrency.</p>
+            
+            <h3>Creating Threads by Extending <code>Thread</code> Class</h3>
+            <pre><code>// Extending the Thread class
+public class ThreadExtensionExample extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread running. ID: " + this.getId());
+    }
+
+    public static void main(String[] args) {
+        ThreadExtensionExample thread = new ThreadExtensionExample();
+        thread.start();
+    }
+}
+            </code></pre>
+
+            <h3>Creating Threads by Implementing <code>Runnable</code> Interface</h3>
+            <pre><code>// Implementing the Runnable interface
+public class RunnableExample implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Runnable thread running. ID: " + Thread.currentThread().getId());
+    }
+
+    public static void main(String[] args) {
+        RunnableExample runnable = new RunnableExample();
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+}
+            </code></pre>
+
+            <h3>Creating Threads Using Lambda Expressions</h3>
+            <pre><code>// Using lambda expressions to create threads
+public class LambdaThreadExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -> {
+            System.out.println("Lambda thread running. ID: " + Thread.currentThread().getId());
+        });
+        thread.start();
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Synchronization Section -->
+        <section id="synchronization">
+            <h2>Synchronization</h2>
+            <p>Ensure thread safety and prevent race conditions using synchronization mechanisms.</p>
+            
+            <h3>Synchronized Methods</h3>
+            <pre><code>// Synchronized method to prevent race conditions
+public class SynchronizedMethodExample {
+    private int counter = 0;
+
+    public synchronized void increment() {
+        counter++;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SynchronizedMethodExample example = new SynchronizedMethodExample();
+
+        Thread t1 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+            </code></pre>
+
+            <h3>Synchronized Blocks</h3>
+            <pre><code>// Using synchronized blocks for finer control
+public class SynchronizedBlockExample {
+    private int counter = 0;
+    private final Object lock = new Object();
+
+    public void increment() {
+        synchronized(lock) {
+            counter++;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SynchronizedBlockExample example = new SynchronizedBlockExample();
+
+        Thread t1 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+            </code></pre>
+
+            <h3>Using <code>java.util.concurrent.locks</code></h3>
+            <pre><code>// Using ReentrantLock for advanced synchronization
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private int counter = 0;
+    private final Lock lock = new ReentrantLock();
+
+    public void increment() {
+        lock.lock(); // Acquire the lock
+        try {
+            counter++;
+        } finally {
+            lock.unlock(); // Release the lock
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        Thread t1 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for(int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Counter Value: " + example.counter);
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Interprocess Communication Section -->
+        <section id="interprocess-communication">
+            <h2>Interprocess Communication (IPC)</h2>
+            <p>Facilitate communication between processes using various IPC mechanisms.</p>
+            
+            <h3>Pipes: Parent-Child Communication via Standard Streams</h3>
+            <pre><code>// Parent sends data to child process via pipes
+import java.io.*;
+
+public class ParentProcessIPC {
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "ChildProcessIPC");
+        processBuilder.redirectErrorStream(true);
+
+        try {
+            Process process = processBuilder.start();
+
+            // Send data to child
+            BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(process.getOutputStream())
+            );
+
+            for(int i = 1; i <= 5; i++) {
+                writer.write(i + "\n");
+            }
+            writer.write("END\n"); // Signal end of input
+            writer.flush();
+            writer.close();
+
+            // Read sum from child
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while((line = reader.readLine()) != null) {
+                System.out.println("Sum from Child: " + line);
+            }
+
+            process.waitFor();
+
+        } catch(IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// ChildProcessIPC.java
+public class ChildProcessIPC {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(System.in));
+             BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(System.out))) {
+
+            String line;
+            int sum = 0;
+            while((line = reader.readLine()) != null) {
+                if(line.equals("END")) {
+                    break;
+                }
+                try {
+                    int num = Integer.parseInt(line);
+                    sum += num;
+                } catch(NumberFormatException e) {
+                    // Ignore invalid input
+                }
+            }
+
+            writer.write(String.valueOf(sum));
+            writer.newLine();
+            writer.flush();
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+
+            <h3>Sockets: Network-based IPC</h3>
+            <pre><code>// Simple server-client communication using sockets
+
+// Server.java
+import java.io.*;
+import java.net.*;
+
+public class Server {
+    public static void main(String[] args) {
+        try(ServerSocket serverSocket = new ServerSocket(5000)) {
+            System.out.println("Server started. Waiting for connection...");
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected.");
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(socket.getInputStream())
+            );
+            BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(socket.getOutputStream())
+            );
+
+            String message = reader.readLine();
+            System.out.println("Received from client: " + message);
+
+            writer.write("Hello from Server\n");
+            writer.flush();
+
+            socket.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// Client.java
+import java.io.*;
+import java.net.*;
+
+public class Client {
+    public static void main(String[] args) {
+        try(Socket socket = new Socket("localhost", 5000)) {
+            BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(socket.getOutputStream())
+            );
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(socket.getInputStream())
+            );
+
+            writer.write("Hello from Client\n");
+            writer.flush();
+
+            String response = reader.readLine();
+            System.out.println("Received from server: " + response);
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Advanced Topics Section -->
+        <section id="advanced-topics">
+            <h2>Advanced Topics</h2>
+            <p>Explore complex scenarios like deadlocks, thread starvation, and more.</p>
+            
+            <h3>Deadlock Example and Avoidance</h3>
+            <pre><code>// Deadlock scenario
+public class DeadlockExample {
+    private final Object resource1 = new Object();
+    private final Object resource2 = new Object();
+
+    public void methodA() {
+        synchronized(resource1) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch(InterruptedException e) {}
+            synchronized(resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public void methodB() {
+        synchronized(resource2) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            try { Thread.sleep(100); } catch(InterruptedException e) {}
+            synchronized(resource1) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        DeadlockExample example = new DeadlockExample();
+
+        Thread t1 = new Thread(() -> example.methodA());
+        Thread t2 = new Thread(() -> example.methodB());
+
+        t1.start();
+        t2.start();
+    }
+}
+
+// Deadlock Avoidance by Lock Ordering
+public class DeadlockAvoidanceExample {
+    private final Object resource1 = new Object();
+    private final Object resource2 = new Object();
+
+    public void methodA() {
+        synchronized(resource1) {
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch(InterruptedException e) {}
+            synchronized(resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public void methodB() {
+        synchronized(resource1) { // Acquire in the same order
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource1");
+            try { Thread.sleep(100); } catch(InterruptedException e) {}
+            synchronized(resource2) {
+                System.out.println("Thread " + Thread.currentThread().getId() + " acquired Resource2");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        DeadlockAvoidanceExample example = new DeadlockAvoidanceExample();
+
+        Thread t1 = new Thread(() -> example.methodA());
+        Thread t2 = new Thread(() -> example.methodB());
+
+        t1.start();
+        t2.start();
+    }
+}
+            </code></pre>
+
+            <h3>Preventing Starvation with Fair Locks</h3>
+            <pre><code>// Using fair ReentrantLock to prevent starvation
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class FairLockExample {
+    private final Lock lock = new ReentrantLock(true); // Fair lock
+
+    public void accessResource(String threadName) {
+        lock.lock();
+        try {
+            System.out.println(threadName + " acquired the lock.");
+            Thread.sleep(100);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println(threadName + " released the lock.");
+            lock.unlock();
+        }
+    }
+
+    public static void main(String[] args) {
+        FairLockExample example = new FairLockExample();
+
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            example.accessResource(threadName);
+        };
+
+        // Create multiple threads
+        for(int i = 1; i <= 5; i++) {
+            Thread t = new Thread(task, "Thread-" + i);
+            t.start();
+        }
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Utilities Section -->
+        <section id="utilities">
+            <h2>Utilities</h2>
+            <p>Reusable utility classes and methods for common tasks.</p>
+            
+            <h3>Getting Current Process ID</h3>
+            <pre><code>// Retrieve the current process ID using ProcessHandle (Java 9+)
+public class GetCurrentPID {
+    public static void main(String[] args) {
+        long pid = ProcessHandle.current().pid();
+        System.out.println("Current Process ID: " + pid);
+    }
+}
+            </code></pre>
+
+            <h3>Executing Shell Commands and Capturing Output</h3>
+            <pre><code>// Execute a shell command and capture its output
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class ShellCommandUtility {
+    public static void main(String[] args) {
+        String command = "echo Hello from shell";
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", command);
+
+        try {
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            String output = reader.readLine();
+            System.out.println("Shell Output: " + output);
+
+            int exitCode = process.waitFor();
+            System.out.println("Exited with code: " + exitCode);
+
+        } catch(IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+            </code></pre>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary">
+            <h2>Summary</h2>
+            <p>
+                This repository provides a collection of common Java code snippets for process and thread manipulation. 
+                From creating and managing processes to implementing multithreading with synchronization, these snippets 
+                serve as reusable components to enhance your Java applications. Whether you're dealing with interprocess 
+                communication, preventing concurrency issues like deadlocks and starvation, or utilizing advanced synchronization 
+                mechanisms, these examples offer practical solutions to common programming challenges.
+            </p>
+        </section>
+
+        <!-- Further Activities Section -->
+        <section id="further-activities">
+            <h2>Further Activities</h2>
+            <ol>
+                <li><strong>Implement Producer-Consumer Pattern:</strong>
+                    <ul>
+                        <li>Use threads to simulate producers generating data and consumers processing it.</li>
+                        <li>Utilize synchronization mechanisms to manage shared resources.</li>
+                    </ul>
+                </li>
+                <li><strong>Develop a Multi-threaded Chat Server:</strong>
+                    <ul>
+                        <li>Create a server that can handle multiple client connections simultaneously.</li>
+                        <li>Manage client threads efficiently to ensure scalability.</li>
+                    </ul>
+                </li>
+                <li><strong>Experiment with Thread Pools:</strong>
+                    <ul>
+                        <li>Use <code>ExecutorService</code> to manage a pool of threads for executing tasks.</li>
+                        <li>Compare performance with manually managed threads.</li>
+                    </ul>
+                </li>
+                <li><strong>Explore Advanced Synchronization Utilities:</strong>
+                    <ul>
+                        <li>Implement tasks using <code>Semaphore</code>, <code>CountDownLatch</code>, and <code>CyclicBarrier</code>.</li>
+                        <li>Understand their use-cases and benefits.</li>
+                    </ul>
+                </li>
+                <li><strong>Build a GUI Application with Background Processing:</strong>
+                    <ul>
+                        <li>Create a responsive Swing or JavaFX application that performs background tasks.</li>
+                        <li>Ensure proper synchronization between the GUI thread and worker threads.</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Java Common Code Snippets. All rights reserved.</p>
+    </footer>
+</body>
+</html>
